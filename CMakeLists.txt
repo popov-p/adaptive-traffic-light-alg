@@ -6,8 +6,6 @@ set(PROJECT_SOURCES
 	main.cpp
 	traffic-light.h
         traffic-light.cpp
-        phase.h
-        phase.cpp
         event.h
         event.cpp
         crossroad-manager.h
@@ -15,7 +13,10 @@ set(PROJECT_SOURCES
         stage.cpp
         stage.h
         circular-list.h
-        circular-list.cpp)
+        circular-list.cpp
+        utils.h
+        constants.h
+        constants.cpp)
 
 add_executable(alg
 		${PROJECT_SOURCES})

@@ -1,32 +1,42 @@
 #ifndef STAGE_H
 #define STAGE_H
 
+#include "traffic-light.h"
+#include "utils.h"
+#include "constants.h"
 #include <string>
-#include <chrono>
-#include <map>
+#include <memory>
 
-enum class StageType {
-  PEDESTRIAN,
-  VEHICLE,
-  NONE
-};
 
-using Duration = std::chrono::seconds;
-extern std::map<StageType, Duration> default_durations;
 
 class Stage {
 public:
-  Stage() : _stage_type(StageType::NONE), _duration(default_durations[StageType::NONE]), _description("") {}
+  Stage() : _stage_type(StageType::NONE),
+            _duration(default_durations[StageType::NONE]),
+            _description("") {};
+
   Stage(StageType stage_type,
         Duration duration,
-        std::string description) : _stage_type(stage_type),
+        std::string description,
+        std::vector<std::shared_ptr<TrafficLight>> involved_traffic_lights) :
+                                   _stage_type(stage_type),
                                    _duration(duration),
-                                   _description(description) {};
+                                   _description(description),
+                                   _involved_traffic_lights(involved_traffic_lights) {};
+  Stage& operator=(const Stage& other) {
+    if (this != &other) {
+        _stage_type = other._stage_type;
+        _duration = other._duration;
+        _description = other._description;
+        // TODO: copy traffic lights if needed
+      }
+    return *this;
+  }
     ;
 private:
   StageType _stage_type;
   Duration _duration;
   std::string _description;
-  //TODO: traffic lights used;
+  std::vector<std::shared_ptr<TrafficLight>> _involved_traffic_lights;
 };
 #endif
