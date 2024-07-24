@@ -28,7 +28,7 @@ public:
         _stage_type = other._stage_type;
         _duration = other._duration;
         _description = other._description;
-        // TODO: copy traffic lights if needed
+        _involved_traffic_lights = other._involved_traffic_lights;
       }
     return *this;
   }

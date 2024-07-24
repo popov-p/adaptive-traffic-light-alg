@@ -6,11 +6,11 @@ auto main(int argc, char** argv) -> int {
   CrossroadManager crmgr(Stage(StageType::PEDESTRIAN,
                                default_durations[StageType::PEDESTRIAN],
                                "PEDESTRIAN STAGE",
-                               std::move(initialize_traffic_lights<PedestrianTrafficLight, 5, 13>())),
+                               std::move(initialize_traffic_lights<PedestrianTrafficLight, 5, 8>())),
                          Stage(StageType::VEHICLE,
                                default_durations[StageType::VEHICLE],
                                "NORTH-SOUTH VEHICULAR STAGE",
-                               std::move(initialize_traffic_lights<VehicleTrafficLight, 1, 2>())),
+                               std::move(initialize_traffic_lights<VehicleTrafficLight, 2, 2>())),
 
                          Stage(StageType::VEHICLE,
                                default_durations[StageType::VEHICLE],
