@@ -6,9 +6,13 @@
 #include <vector>
 
 class CrossroadManager {
-  CrossroadManager() = default;
-  void change_stage();
+public:
+  template <typename... Args>
+  CrossroadManager(Args&&... args) : _stages(std::forward<Args>(args)...) {};
+  void main_loop();
+private:
   CircularList<Stage> _stages;
+  Stage _active_stage;
 };
 
 #endif // CROSSROADMANAGER_H

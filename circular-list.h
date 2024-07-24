@@ -6,51 +6,56 @@
 template <typename T>
 class CircularList {
 public:
-    using iterator = typename std::list<T>::iterator;
-    using const_iterator = typename std::list<T>::const_iterator;
+  template <typename... Args>
+  CircularList(Args&&... args) {
+    (elements.push_back(std::forward<Args>(args)), ...);
+  }
 
-    void add(const T& value) {
-        elements.push_back(value);
-    }
+  using iterator = typename std::list<T>::iterator;
+  using const_iterator = typename std::list<T>::const_iterator;
 
-    void remove(const_iterator it) {
-        elements.erase(it);
-    }
+  void add(const T& value) {
+    elements.push_back(value);
+  }
 
-    iterator begin() {
-        return elements.begin();
-    }
+  void remove(const_iterator it) {
+    elements.erase(it);
+  }
 
-    const_iterator begin() const {
-        return elements.begin();
-    }
+  iterator begin() {
+    return elements.begin();
+  }
 
-    iterator end() {
-        return elements.end();
-    }
+  const_iterator begin() const {
+    return elements.begin();
+  }
 
-    const_iterator end() const {
-        return elements.end();
-    }
+  iterator end() {
+    return elements.end();
+  }
 
-    iterator next(iterator it) {
-        return ++it == elements.end() ? elements.begin() : it;
-    }
+  const_iterator end() const {
+    return elements.end();
+  }
 
-    const_iterator next(const_iterator it) const {
-        return ++it == elements.end() ? elements.begin() : it;
-    }
+  iterator next(iterator it) {
+    return ++it == elements.end() ? elements.begin() : it;
+  }
 
-    iterator prev(iterator it) {
-        return it == elements.begin() ? --elements.end() : --it;
-    }
+  const_iterator next(const_iterator it) const {
+    return ++it == elements.end() ? elements.begin() : it;
+  }
 
-    const_iterator prev(const_iterator it) const {
-        return it == elements.begin() ? --elements.end() : --it;
-    }
+  iterator prev(iterator it) {
+    return it == elements.begin() ? --elements.end() : --it;
+  }
+
+  const_iterator prev(const_iterator it) const {
+    return it == elements.begin() ? --elements.end() : --it;
+  }
 
 private:
-    std::list<T> elements;
+  std::list<T> elements;
 };
 
 #endif
