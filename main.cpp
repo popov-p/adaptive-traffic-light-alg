@@ -4,7 +4,6 @@
 #include <thread>
 
 auto main(int argc, char** argv) -> int {
-  std::cout << "KEK" << std::endl;
   boost::asio::io_context io_context;
   CrossroadManager crmgr(Stage(StageType::PEDESTRIAN,
                                duration_bounds[StageType::PEDESTRIAN].first,
@@ -22,10 +21,9 @@ auto main(int argc, char** argv) -> int {
   std::thread io_thread([&io_context]() {
           io_context.run();
       });
-  std::this_thread::sleep_for(std::chrono::seconds(300));
+  crmgr.main_loop();
   io_context.stop();
   io_thread.join();
-  std::cout << "LOL" << std::endl;
   return 0;
 }
 

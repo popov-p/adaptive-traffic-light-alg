@@ -24,8 +24,10 @@ public:
                                    _involved_traffic_lights(involved_traffic_lights) {};
 
   Stage& operator=(const Stage& other);
-  //void allow_movement();
   void update();
+  StageType get_stage_type();
+  Duration get_duration();
+  void switch_traffic_lights_colors();
 private:
   unsigned short get_number_of_users();
   StageType _stage_type;

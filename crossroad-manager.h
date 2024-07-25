@@ -14,7 +14,6 @@ public:
   void main_loop();
 
 private:
-  void update_next_stage();
   CircularList<Stage> _stages;
   CircularList<Stage>::iterator _active_stage;
 };

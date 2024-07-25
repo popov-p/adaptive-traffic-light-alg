@@ -18,29 +18,30 @@ public:
       _io_context(io_context),
       _timer(io_context),
       _traffic_light_colors(std::forward<Args>(args)...),
-      _active_color(_traffic_light_colors.begin()) {
-    std::srand(static_cast<unsigned>(std::time(nullptr)));
-    std::cout << "C-TOR CALL" << std::endl;
-    start_timer();
+      _active_color(_traffic_light_colors.begin())
+  {
+     std::srand(static_cast<unsigned>(std::time(nullptr)));
+     start_timer();
   };
+  void add_event(const Event& event);
   virtual unsigned short get_data_from_camera() const = 0;
   virtual ~TrafficLight() = default;
 protected:
   const unsigned short _id;
+  CircularList<Color> _traffic_light_colors;
+  CircularList<Color>::iterator _active_color;
 private:
   void start_timer() {
-    std::cout << "STARTING TIMER" << std::endl;
-    _timer.expires_after(Duration(2));
+    _timer.expires_after(std::chrono::milliseconds(100));
     _timer.async_wait([this](const boost::system::error_code& error) {
-        std::cout << "WAITING" << std::endl;
         if (!error) {
             process_events();
             start_timer();
           }
       });
   };
+  virtual void handle_event(const Event& event) = 0;
   void process_events() {
-    std::cout << "SUCCESSFULLY HANDLED FROM ID: (DEBUG) " << typeid(*this).name() << _id << std::endl;
     while (!_event_queue.empty()) {
       Event event = _event_queue.front();
       _event_queue.pop();
@@ -48,12 +49,8 @@ private:
     }
   };
 
-  void handle_event(const Event& event) {
-    std::cout << "SUCCESSFULLY HANDLED EVENT FROM TRAFFIC LIGHT" << _id << std::endl;
-  };
   std::queue<Event> _event_queue;
-  CircularList<Color> _traffic_light_colors;
-  CircularList<Color>::iterator _active_color;
+
   boost::asio::io_context& _io_context;
   boost::asio::steady_timer _timer;
 };
@@ -70,8 +67,15 @@ public:
     auto min_value = amount_thresholds[StageType::PEDESTRIAN].first;
     auto max_value = amount_thresholds[StageType::PEDESTRIAN].second;
     auto result = min_value + std::rand() % (max_value - min_value + 1);
-    std::cout << "PEDESTRIAN TRAFFIC LIGHT: " << _id << ", CAMERA VALUE: " << result << std::endl;
+    std::cout << "PEDESTRIAN TRAFFIC LIGHT: " << _id << ", CAMERA VALUE: " << result << " (SYNC)" << std::endl;
     return result;
+  };
+
+  void handle_event(const Event& event) override {
+    if (event.provide_next_color()) {
+      _active_color = _traffic_light_colors.next(_active_color);
+      std::cout << "PEDESTRIAN TRAFFIC LIGHT: " << _id << " SWITCHED LIGHT COLOR TO " << color_to_string(*_active_color) << " (ASYNC)" << std::endl;
+    }
   };
 };
 
@@ -87,8 +91,14 @@ public:
     auto min_value = amount_thresholds[StageType::VEHICLE].first;
     auto max_value = amount_thresholds[StageType::VEHICLE].second;
     auto result = min_value + std::rand() % (max_value - min_value + 1);
-    std::cout << "VEHICULAR TRAFFIC LIGHT: " << _id << ", CAMERA VALUE: " << result << std::endl;
+    std::cout << "VEHICULAR TRAFFIC LIGHT: " << _id << ", CAMERA VALUE: " << result << " (SYNC)" << std::endl;
     return result;
+  };
+  void handle_event(const Event& event) override {
+    if (event.provide_next_color()) {
+      _active_color = _traffic_light_colors.next(_active_color);
+      std::cout << "VEHICULAR TRAFFIC LIGHT: " << _id << " SWITCHED LIGHT COLOR TO " << color_to_string(*_active_color) << " (ASYNC)" << std::endl;
+    }
   };
 };
 

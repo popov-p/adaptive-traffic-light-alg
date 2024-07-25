@@ -16,8 +16,8 @@ std::vector<std::shared_ptr<TrafficLight>> initialize_traffic_lights_impl(boost:
   if constexpr (std::is_same<TrafficLightType, PedestrianTrafficLight>::value) {
     (result.push_back(std::make_shared<TrafficLightType>(StartFromIdx + Is,
                                                          io_context,
-                                                         Color::RED,
-                                                         Color::GREEN)), ...);
+                                                         Color::GREEN,
+                                                         Color::RED)), ...);
   } else if constexpr (std::is_same<TrafficLightType, VehicleTrafficLight>::value) {
     (result.push_back(std::make_shared<TrafficLightType>(StartFromIdx + 2 * Is,
                                                          io_context,

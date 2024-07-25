@@ -1,16 +1,19 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-
 #include "traffic-light.h"
 #include "constants.h"
-#include <optional>
 
 class Event {
+public:
+  Event(unsigned short sender_id,
+        bool turn_next_color = false) : _sender_id(sender_id),
+                                                               _turn_next_color(turn_next_color) {};
+  bool provide_next_color() const {
+    return _turn_next_color;
+  }
 private:
-  std::optional<unsigned short> _sender_id;
-  std::optional<unsigned short> _opposite_pedestrian_count;
-  std::optional<unsigned short> _opposite_vehicle_count;
-  std::optional<Color> _sender_current_color;
+  unsigned short _sender_id;
+  bool _turn_next_color = false;
 };
 #endif // EVENT_H
