@@ -11,7 +11,7 @@
 class Stage {
 public:
   Stage() : _stage_type(StageType::NONE),
-            _duration(default_durations[StageType::NONE]),
+            _duration(duration_bounds[StageType::NONE].first),
             _description("") {};
 
   Stage(StageType stage_type,

@@ -2,11 +2,12 @@
 #define TRAFFICLIGHT_H
 
 #include "event.h"
+#include "constants.h"
 #include "circular-list.h"
 #include <queue>
 #include <boost/asio.hpp>
 #include <boost/asio/steady_timer.hpp>
-
+#include <ctime>
 #include <iostream>
 
 class TrafficLight {
@@ -18,12 +19,14 @@ public:
       _timer(io_context),
       _traffic_light_colors(std::forward<Args>(args)...),
       _active_color(_traffic_light_colors.begin()) {
+    std::srand(static_cast<unsigned>(std::time(nullptr)));
     std::cout << "C-TOR CALL" << std::endl;
     start_timer();
   };
   virtual unsigned short get_data_from_camera() const = 0;
   virtual ~TrafficLight() = default;
-
+protected:
+  const unsigned short _id;
 private:
   void start_timer() {
     std::cout << "STARTING TIMER" << std::endl;
@@ -48,7 +51,6 @@ private:
   void handle_event(const Event& event) {
     std::cout << "SUCCESSFULLY HANDLED EVENT FROM TRAFFIC LIGHT" << _id << std::endl;
   };
-  const unsigned short _id;
   std::queue<Event> _event_queue;
   CircularList<Color> _traffic_light_colors;
   CircularList<Color>::iterator _active_color;
@@ -65,7 +67,11 @@ public:
                                                         io_context,
                                                         std::forward<Args>(args)...) {};
   unsigned short get_data_from_camera() const override {
-    return 0/*TODO: rand*/;
+    auto min_value = amount_thresholds[StageType::PEDESTRIAN].first;
+    auto max_value = amount_thresholds[StageType::PEDESTRIAN].second;
+    auto result = min_value + std::rand() % (max_value - min_value + 1);
+    std::cout << "PEDESTRIAN TRAFFIC LIGHT: " << _id << ", CAMERA VALUE: " << result << std::endl;
+    return result;
   };
 };
 
@@ -78,7 +84,11 @@ public:
                                                      io_context,
                                                      std::forward<Args>(args)...) {};
   unsigned short get_data_from_camera() const override {
-    return 0/*TODO: rand*/;
+    auto min_value = amount_thresholds[StageType::VEHICLE].first;
+    auto max_value = amount_thresholds[StageType::VEHICLE].second;
+    auto result = min_value + std::rand() % (max_value - min_value + 1);
+    std::cout << "VEHICULAR TRAFFIC LIGHT: " << _id << ", CAMERA VALUE: " << result << std::endl;
+    return result;
   };
 };
 

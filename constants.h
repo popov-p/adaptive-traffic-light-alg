@@ -18,6 +18,7 @@ enum class Color {
 };
 
 using Duration = std::chrono::seconds;
-extern std::map<StageType, Duration> default_durations;
-
+extern const unsigned short conversion_factor;
+extern std::map<StageType, std::pair<Duration, Duration>> duration_bounds;
+extern std::map<StageType, std::pair<unsigned short, unsigned short>> amount_thresholds;
 #endif // CONSTANTS_H
