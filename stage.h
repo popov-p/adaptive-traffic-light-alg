@@ -8,7 +8,6 @@
 #include <memory>
 
 
-
 class Stage {
 public:
   Stage() : _stage_type(StageType::NONE),
@@ -23,17 +22,12 @@ public:
                                    _duration(duration),
                                    _description(description),
                                    _involved_traffic_lights(involved_traffic_lights) {};
-  Stage& operator=(const Stage& other) {
-    if (this != &other) {
-        _stage_type = other._stage_type;
-        _duration = other._duration;
-        _description = other._description;
-        _involved_traffic_lights = other._involved_traffic_lights;
-      }
-    return *this;
-  }
-    ;
+
+  Stage& operator=(const Stage& other);
+  //void allow_movement();
+  void update();
 private:
+  unsigned short get_number_of_users();
   StageType _stage_type;
   Duration _duration;
   std::string _description;

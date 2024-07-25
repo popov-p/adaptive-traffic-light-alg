@@ -9,12 +9,14 @@ class CrossroadManager {
 public:
   template <typename... Args>
   CrossroadManager(Args&&... args) : _stages(std::forward<Args>(args)...) {
-    _active_stage = *_stages.begin();
+    _active_stage = _stages.begin();
   };
   void main_loop();
+
 private:
+  void update_next_stage();
   CircularList<Stage> _stages;
-  Stage _active_stage;
+  CircularList<Stage>::iterator _active_stage;
 };
 
 #endif // CROSSROADMANAGER_H

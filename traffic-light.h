@@ -6,7 +6,7 @@
 #include <queue>
 #include <boost/asio.hpp>
 #include <boost/asio/steady_timer.hpp>
-#include <boost/bind/bind.hpp>
+
 #include <iostream>
 
 class TrafficLight {
@@ -17,11 +17,11 @@ public:
       _io_context(io_context),
       _timer(io_context),
       _traffic_light_colors(std::forward<Args>(args)...),
-      _active_color(*_traffic_light_colors.begin()) {
+      _active_color(_traffic_light_colors.begin()) {
     std::cout << "C-TOR CALL" << std::endl;
     start_timer();
   };
-  Color get_active_color();
+  virtual unsigned short get_data_from_camera() const = 0;
   virtual ~TrafficLight() = default;
 
 private:
@@ -36,9 +36,8 @@ private:
           }
       });
   };
-  void test(){std::cout << "SUCCESSFULLY HANDLED FROM ID: " << _id << std::endl;};
   void process_events() {
-    test();
+    std::cout << "SUCCESSFULLY HANDLED FROM ID: (DEBUG) " << typeid(*this).name() << _id << std::endl;
     while (!_event_queue.empty()) {
       Event event = _event_queue.front();
       _event_queue.pop();
@@ -52,7 +51,7 @@ private:
   const unsigned short _id;
   std::queue<Event> _event_queue;
   CircularList<Color> _traffic_light_colors;
-  Color _active_color;
+  CircularList<Color>::iterator _active_color;
   boost::asio::io_context& _io_context;
   boost::asio::steady_timer _timer;
 };
@@ -65,6 +64,9 @@ public:
                          Args&&... args) : TrafficLight(id,
                                                         io_context,
                                                         std::forward<Args>(args)...) {};
+  unsigned short get_data_from_camera() const override {
+    return 0/*TODO: rand*/;
+  };
 };
 
 class VehicleTrafficLight: public TrafficLight {
@@ -75,6 +77,9 @@ public:
                       Args&&... args) : TrafficLight(id,
                                                      io_context,
                                                      std::forward<Args>(args)...) {};
+  unsigned short get_data_from_camera() const override {
+    return 0/*TODO: rand*/;
+  };
 };
 
 #endif //TRAFFICLIGHT_H

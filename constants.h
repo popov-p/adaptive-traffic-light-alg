@@ -17,8 +17,6 @@ enum class Color {
   NONE
 };
 
-
-
 using Duration = std::chrono::seconds;
 extern std::map<StageType, Duration> default_durations;
 
