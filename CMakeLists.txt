@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.5.0)
 
 project(adaptive-traffic-light-alg LANGUAGES CXX)
 
+find_package(Boost REQUIRED COMPONENTS system)
+
 set(PROJECT_SOURCES
 	main.cpp
 	traffic-light.h
@@ -18,6 +20,7 @@ set(PROJECT_SOURCES
         constants.h
         constants.cpp)
 
-add_executable(alg
-		${PROJECT_SOURCES})
+add_executable(alg ${PROJECT_SOURCES})
+target_include_directories(alg PRIVATE ${Boost_INCLUDE_DIRS})
+target_link_libraries(alg ${Boost_LIBRARIES})
 		
