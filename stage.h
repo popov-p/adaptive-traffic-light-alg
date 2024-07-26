@@ -1,6 +1,7 @@
 #ifndef STAGE_H
 #define STAGE_H
 
+
 #include "traffic-light.h"
 #include "utils.h"
 #include "constants.h"
@@ -12,7 +13,7 @@ class Stage {
 public:
   Stage() : _stage_type(StageType::NONE),
             _duration(duration_bounds[StageType::NONE].first),
-            _description("") {};
+            _description("") {}
 
   Stage(StageType stage_type,
         Duration duration,
@@ -21,7 +22,7 @@ public:
                                    _stage_type(stage_type),
                                    _duration(duration),
                                    _description(description),
-                                   _involved_traffic_lights(involved_traffic_lights) {};
+                                   _involved_traffic_lights(involved_traffic_lights) {}
 
   Stage& operator=(const Stage& other);
   void update();
@@ -35,4 +36,6 @@ private:
   std::string _description;
   std::vector<std::shared_ptr<TrafficLight>> _involved_traffic_lights;
 };
+
+
 #endif

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <thread>
 
+
 auto main(int argc, char** argv) -> int {
   boost::asio::io_context io_context;
   CrossroadManager crmgr(Stage(StageType::PEDESTRIAN,
@@ -20,7 +21,7 @@ auto main(int argc, char** argv) -> int {
 
   std::thread io_thread([&io_context]() {
           io_context.run();
-      });
+        });
   crmgr.main_loop();
   io_context.stop();
   io_thread.join();

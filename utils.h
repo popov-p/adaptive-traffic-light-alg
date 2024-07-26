@@ -1,10 +1,12 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+
 #include "traffic-light.h"
 #include <type_traits>
 #include <memory>
 #include <vector>
+
 
 template <typename TrafficLightType, std::size_t StartFromIdx, std::size_t... Is>
 std::vector<std::shared_ptr<TrafficLight>> initialize_traffic_lights_impl(boost::asio::io_context& io_context,

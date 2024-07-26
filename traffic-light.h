@@ -1,6 +1,7 @@
 #ifndef TRAFFICLIGHT_H
 #define TRAFFICLIGHT_H
 
+
 #include "event.h"
 #include "constants.h"
 #include "circular-list.h"
@@ -9,6 +10,7 @@
 #include <boost/asio/steady_timer.hpp>
 #include <ctime>
 #include <iostream>
+
 
 class TrafficLight {
 public:
@@ -22,7 +24,8 @@ public:
   {
      std::srand(static_cast<unsigned>(std::time(nullptr)));
      start_timer();
-  };
+  }
+
   void add_event(const Event& event);
   virtual unsigned short get_data_from_camera() const = 0;
   virtual ~TrafficLight() = default;
@@ -39,7 +42,8 @@ private:
             start_timer();
           }
       });
-  };
+  }
+
   virtual void handle_event(const Event& event) = 0;
   void process_events() {
     while (!_event_queue.empty()) {
@@ -47,10 +51,9 @@ private:
       _event_queue.pop();
       handle_event(event);
     }
-  };
+  }
 
   std::queue<Event> _event_queue;
-
   boost::asio::io_context& _io_context;
   boost::asio::steady_timer _timer;
 };
@@ -62,21 +65,22 @@ public:
                          boost::asio::io_context& io_context,
                          Args&&... args) : TrafficLight(id,
                                                         io_context,
-                                                        std::forward<Args>(args)...) {};
+                                                        std::forward<Args>(args)...) {}
+
   unsigned short get_data_from_camera() const override {
     auto min_value = amount_thresholds[StageType::PEDESTRIAN].first;
     auto max_value = amount_thresholds[StageType::PEDESTRIAN].second;
     auto result = min_value + std::rand() % (max_value - min_value + 1);
     std::cout << "PEDESTRIAN TRAFFIC LIGHT: " << _id << ", CAMERA VALUE: " << result << " (SYNC)" << std::endl;
     return result;
-  };
+  }
 
   void handle_event(const Event& event) override {
     if (event.provide_next_color()) {
       _active_color = _traffic_light_colors.next(_active_color);
       std::cout << "PEDESTRIAN TRAFFIC LIGHT: " << _id << " SWITCHED LIGHT COLOR TO " << color_to_string(*_active_color) << " (ASYNC)" << std::endl;
     }
-  };
+  }
 };
 
 class VehicleTrafficLight: public TrafficLight {
@@ -86,20 +90,22 @@ public:
                       boost::asio::io_context& io_context,
                       Args&&... args) : TrafficLight(id,
                                                      io_context,
-                                                     std::forward<Args>(args)...) {};
+                                                     std::forward<Args>(args)...) {}
   unsigned short get_data_from_camera() const override {
     auto min_value = amount_thresholds[StageType::VEHICLE].first;
     auto max_value = amount_thresholds[StageType::VEHICLE].second;
     auto result = min_value + std::rand() % (max_value - min_value + 1);
     std::cout << "VEHICULAR TRAFFIC LIGHT: " << _id << ", CAMERA VALUE: " << result << " (SYNC)" << std::endl;
     return result;
-  };
+  }
+
   void handle_event(const Event& event) override {
     if (event.provide_next_color()) {
       _active_color = _traffic_light_colors.next(_active_color);
       std::cout << "VEHICULAR TRAFFIC LIGHT: " << _id << " SWITCHED LIGHT COLOR TO " << color_to_string(*_active_color) << " (ASYNC)" << std::endl;
     }
-  };
+  }
 };
+
 
 #endif //TRAFFICLIGHT_H

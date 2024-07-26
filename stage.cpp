@@ -1,5 +1,6 @@
  #include "stage.h"
 
+
 Stage& Stage::operator=(const Stage& other) {
   if (this != &other) {
     _stage_type = other._stage_type;
@@ -9,7 +10,6 @@ Stage& Stage::operator=(const Stage& other) {
   }
   return *this;
 };
-
 
 void Stage::update() {
   auto lower_available_bound = amount_thresholds[_stage_type].first;

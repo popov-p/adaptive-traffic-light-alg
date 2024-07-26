@@ -1,5 +1,6 @@
 #include "constants.h"
 
+
 std::map<StageType, std::pair<unsigned short, unsigned short>> amount_thresholds {
   { StageType::PEDESTRIAN, {10, 20} },
   { StageType::VEHICLE, {30, 60} },
@@ -26,6 +27,5 @@ std::string color_to_string(Color color) {
     default:            return "UNKNOWN";
   }
 };
-
 
 const Duration YELLOW_LIGHT_DURATION = Duration(3);

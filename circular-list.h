@@ -1,7 +1,9 @@
 #ifndef CIRCULARLIST_H
 #define CIRCULARLIST_H
 
+
 #include <list>
+
 
 template <typename T>
 class CircularList {
@@ -57,5 +59,6 @@ public:
 private:
   std::list<T> elements;
 };
+
 
 #endif

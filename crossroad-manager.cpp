@@ -1,8 +1,9 @@
 #include "crossroad-manager.h"
 #include <thread>
 
+
 void CrossroadManager::main_loop() {
-  int counter = 0;
+  unsigned short debug_demo_counter = 0;
   while(true) {
     if (_stages.next(_active_stage)->get_stage_type() == StageType::VEHICLE) {
         _stages.next(_active_stage)->update();
@@ -22,8 +23,8 @@ void CrossroadManager::main_loop() {
       std::cout << "SLEEPING FOR: " << _active_stage->get_duration().count() - YELLOW_LIGHT_DURATION.count() << std::endl;
       std::this_thread::sleep_for(_active_stage->get_duration() - YELLOW_LIGHT_DURATION);
     }
-    counter++;
-    if(counter == 3) {
+    debug_demo_counter++;
+    if(debug_demo_counter == 3) {
       std::cout << "GENERAL CYCLE DONE" << std::endl;
       break;
     }
