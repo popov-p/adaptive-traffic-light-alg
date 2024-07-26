@@ -8,20 +8,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Boost REQUIRED COMPONENTS system)
 
 set(PROJECT_SOURCES
-	main.cpp
-	traffic-light.h
-        traffic-light.cpp
-        event.h
-        event.cpp
-        crossroad-manager.h
-        crossroad-manager.cpp
-        stage.cpp
-        stage.h
-        circular-list.h
-        circular-list.cpp
-        utils.h
-        constants.h
-        constants.cpp)
+        src/main.cpp
+        src/traffic-light.h
+        src/traffic-light.cpp
+        src/event.h
+        src/event.cpp
+        src/crossroad-manager.h
+        src/crossroad-manager.cpp
+        src/stage.cpp
+        src/stage.h
+        src/circular-list.h
+        src/circular-list.cpp
+        src/utils.h
+        src/constants.h
+        src/constants.cpp)
 
 add_executable(alg ${PROJECT_SOURCES})
 target_include_directories(alg PRIVATE ${Boost_INCLUDE_DIRS})
