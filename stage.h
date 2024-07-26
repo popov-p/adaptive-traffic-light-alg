@@ -8,7 +8,12 @@
 #include <string>
 #include <memory>
 
-
+/**
+ * \brief Класс для представления стадии светофора.
+ *
+ * Класс `Stage` представляет собой стадию светофора, включая информацию о типе стадии,
+ * продолжительности, описании и задействованных светофорах.
+ */
 class Stage {
 public:
   Stage() : _stage_type(StageType::NONE),
@@ -25,9 +30,22 @@ public:
                                    _involved_traffic_lights(involved_traffic_lights) {}
 
   Stage& operator=(const Stage& other);
+  /**
+   * \brief Обновляет состояние стадии.
+   *
+   * Метод обновляет состояние стадии.
+   * Читаем данные со всех камер светофоров, задействованных в стадии,
+   * получаем максимальное значение "пользователей (машин или пешеходов)",
+   * обновляем длительность стадии на основании данных с камер.
+   *
+   */
   void update();
   StageType get_stage_type();
   Duration get_duration();
+  /**
+   * \brief Переключает цвета светофоров на следующий.
+   *
+   */
   void switch_traffic_lights_colors();
 private:
   unsigned short get_number_of_users();

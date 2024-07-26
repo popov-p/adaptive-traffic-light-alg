@@ -12,6 +12,13 @@
 #include <iostream>
 
 
+/**
+ * \brief Абстрактный класс для светофоров.
+ *
+ * Класс `TrafficLight` представляет собой базовый класс для светофоров. Он управляет
+ * цветами светофора, обрабатывает события и управляет таймером для регулярного выполнения
+ * задач, читаемых из своей очереди.
+ */
 class TrafficLight {
 public:
   template <typename... Args>
@@ -34,6 +41,12 @@ protected:
   CircularList<Color> _traffic_light_colors;
   CircularList<Color>::iterator _active_color;
 private:
+  /**
+   * \brief Запускает таймер для регулярного выполнения задач.
+   *
+   * Таймер устанавливается на 100 миллисекунд и запускает
+   * асинхронный опрос очереди с событиями, выполняя их, если имеются доступные.
+   */
   void start_timer() {
     _timer.expires_after(std::chrono::milliseconds(100));
     _timer.async_wait([this](const boost::system::error_code& error) {
@@ -44,7 +57,20 @@ private:
       });
   }
 
+  /**
+   * \brief Обрабатывает событие.
+   *
+   * Чисто виртуальная функция, которая должна быть реализована в производных классах.
+   * Обрабатывает конкретное событие.
+   *
+   * \param event Событие, которое нужно обработать.
+   */
   virtual void handle_event(const Event& event) = 0;
+  /**
+   * \brief Обрабатывает события из очереди.
+   *
+   * Последовательно извлекает все события из очереди и выполняет их.
+   */
   void process_events() {
     while (!_event_queue.empty()) {
       Event event = _event_queue.front();
